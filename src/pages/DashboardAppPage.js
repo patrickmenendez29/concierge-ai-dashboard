@@ -1,5 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 import { faker } from '@faker-js/faker';
+import {useEffect, useState} from "react";
+
 // @mui
 import { useTheme } from '@mui/material/styles';
 import { Grid, Container, Typography } from '@mui/material';
@@ -22,6 +24,22 @@ import {
 
 export default function DashboardAppPage() {
   const theme = useTheme();
+  const [serverInfo, setServerInfo] = useState({});
+
+  useEffect(() => {
+
+      const url = 'http://localhost:8000/server-info';
+
+      const options = {
+          method: 'GET',
+      };
+
+      fetch(url, options)
+          .then(res => res.json())
+          .then(json => setServerInfo(json))
+          .catch(err => console.error(`error: + ${err}`));
+
+  }, [])
 
   return (
     <>
@@ -36,24 +54,24 @@ export default function DashboardAppPage() {
 
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Weekly Sales" total={714000} icon={'ant-design:android-filled'} />
+            <AppWidgetSummary title="Monthly Active Users" total={1229} icon={'ant-design:team-outlined'} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="New Users" total={1352831} color="info" icon={'ant-design:apple-filled'} />
+            <AppWidgetSummary title="Total users" total={10420} color="info" icon={'ant-design:user-outlined'} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Item Orders" total={1723315} color="warning" icon={'ant-design:windows-filled'} />
+            <AppWidgetSummary title="Estimated Revenue" total={123000} color="warning" icon={'ant-design:dollar-outlined'} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Bug Reports" total={234} color="error" icon={'ant-design:bug-filled'} />
+            <AppWidgetSummary title="Tokens Used" total={serverInfo.usedTokens} color="error" icon={'ant-design:tags-outlined'} />
           </Grid>
 
           <Grid item xs={12} md={6} lg={8}>
             <AppWebsiteVisits
-              title="Website Visits"
+              title="Chat Usage"
               subheader="(+43%) than last year"
               chartLabels={[
                 '01/01/2003',
@@ -75,30 +93,19 @@ export default function DashboardAppPage() {
                   fill: 'solid',
                   data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30],
                 },
-                {
-                  name: 'Team B',
-                  type: 'area',
-                  fill: 'gradient',
-                  data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43],
-                },
-                {
-                  name: 'Team C',
-                  type: 'line',
-                  fill: 'solid',
-                  data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39],
-                },
+
               ]}
             />
           </Grid>
 
           <Grid item xs={12} md={6} lg={4}>
             <AppCurrentVisits
-              title="Current Visits"
+              title="Request Usage"
               chartData={[
-                { label: 'America', value: 4344 },
-                { label: 'Asia', value: 5435 },
-                { label: 'Europe', value: 1443 },
-                { label: 'Africa', value: 4443 },
+                { label: 'Room service', value: 4344 },
+                { label: 'General info', value: 5435 },
+                { label: 'Bell boy', value: 1443 },
+                { label: 'Reservations', value: 4443 },
               ]}
               chartColors={[
                 theme.palette.primary.main,
